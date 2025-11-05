@@ -13,9 +13,9 @@ export const GET = authMobileRequest(async (request: NextRequest) => {
 
   const locations = await db.query.Locations.findMany({
     where: eq(Locations.userId, DEFAULT_USER_ID),
-    orderBy: desc(Locations.timestamp),
     limit: parseInt(limit),
     offset: parseInt(page) * parseInt(limit),
+    orderBy: desc(Locations.timestamp),
   })
 
   console.log('Found', locations.length, `locations`)

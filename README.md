@@ -1,6 +1,6 @@
 <img width="150" height="150" alt="splash-icon" src="https://github.com/user-attachments/assets/348bc769-3325-4de7-9552-8a9fb0330c72" />
 
-# creepy
+# tracker
 
 An iOS app that tracks your location and an MCP server that exposes it to your AI.
 

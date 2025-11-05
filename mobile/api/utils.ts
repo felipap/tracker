@@ -13,9 +13,9 @@ if (!EXPO_PUBLIC_API_SECRET) {
 }
 
 export const API_HOST = __DEV__
-  ? // ? 'https://64d25a897d7e.ngrok-free.app'
+  ? 'https://a3ef432ae4e2.ngrok-free.app'
+  : // : EXPO_PUBLIC_SERVER_URL // Endpoint for location data
     EXPO_PUBLIC_SERVER_URL // Endpoint for location data
-  : EXPO_PUBLIC_SERVER_URL // Endpoint for location data
 
 // log('API_HOST', API_HOST);
 
