@@ -77,6 +77,24 @@ export const Locations = pgTable(
 
 export type Location = InferSelectModel<typeof Locations>
 
+export const Screenshots = pgTable('screenshots', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  timestamp: timestamp('timestamp').notNull(),
+  userId: integer('user_id')
+    .notNull()
+    .default(DEFAULT_USER_ID),
+  displayId: text('display_id').notNull(),
+  dataUrl: text('data_url').notNull(),
+  activeWindow: text('active_window'),
+  activeApp: text('active_app'),
+  systemInfo: text('system_info'),
+})
+
+export type Screenshot = InferSelectModel<typeof Screenshots>
+
 // export const Dislocations = pgTable('dislocations', {
 // 	id: serial('id').primaryKey(),
 // 	createdAt: timestamp('created_at').defaultNow().notNull(),

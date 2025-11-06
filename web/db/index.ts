@@ -10,5 +10,5 @@ import * as schema from './schema'
 export const db = drizzle({
   connection: { connectionString: DATABASE_URL },
   schema,
-  logger: true,
+  // logger: true,
 })

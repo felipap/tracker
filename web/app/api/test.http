@@ -1,3 +1,30 @@
+### Test API Endpoints
+
+### Test health check
+GET http://localhost:3000/api/health
+x-tracker-secret: your-secret-here
+
+### Upload screenshots
+POST http://localhost:3000/api/screenshots
+Content-Type: application/json
+x-tracker-secret: your-secret-here
+
+{
+  "screenshots": [
+    {
+      "dataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+      "timestamp": 1699564800000,
+      "displayId": "display-1",
+      "activeWindow": "Chrome - Test Page",
+      "activeApp": "Google Chrome",
+      "systemInfo": {
+        "platform": "darwin",
+        "arch": "arm64"
+      }
+    }
+  ]
+}
+
 ### Test MCP Server
 
 ### Initialize the MCP server
