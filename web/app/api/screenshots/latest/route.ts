@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { DEFAULT_USER_ID, Screenshots } from '@/db/schema'
 import { NextRequest } from 'next/server'
-import { and, desc, eq } from 'drizzle-orm'
+import { and, desc, eq, gte } from 'drizzle-orm'
 
 export async function GET(request: NextRequest) {
   console.log('GET /api/screenshots/latest')
@@ -22,6 +22,10 @@ export async function GET(request: NextRequest) {
   if (displayId) {
     conditions.push(eq(Screenshots.displayId, displayId))
   }
+
+  // Only return screenshots from the last 2 minutes
+  const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000)
+  conditions.push(gte(Screenshots.timestamp, twoMinutesAgo))
 
   const screenshots = await db
     .select()
