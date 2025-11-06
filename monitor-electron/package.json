@@ -1,0 +1,121 @@
+{
+  "name": "monitor-2",
+  "version": "1.0.0",
+  "description": "A simple app that monitors Felipe's computer and makes this data available at monitor.felipap.com",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:renderer-settings\" \"npm run dev:watch-main\"",
+    "dev:watch-main": "NODE_ENV=development nodemon --watch main --ext ts --exec \"npm run build:backend && electron dist/main/main.js\"",
+    "dev:renderer-settings": "vite --config vite.settings.config.js",
+    "build": "npm run build:backend && npm run build:renderers",
+    "build:backend": "tsc -p main/tsconfig.json",
+    "build:renderers": "vite build --config vite.settings.config.js",
+    "watch:main": "tsc -p main/tsconfig.json --watch --preserveWatchOutput",
+    "pack": "npm run build && electron-builder --publish=never",
+    "pack-local": "SKIP_NOTARIZE=true npm run build && SKIP_NOTARIZE=true electron-builder --publish=never && cp -r ./dist-electron/mac-arm64/Monitor.app /Applications/",
+    "start": "electron .",
+    "generate-icon": "mkdir -p assets/icon.iconset && sips -z 16 16 assets/icon.png --out assets/icon.iconset/icon_16x16.png && sips -z 32 32 assets/icon.png --out assets/icon.iconset/icon_16x16@2x.png && sips -z 32 32 assets/icon.png --out assets/icon.iconset/icon_32x32.png && sips -z 64 64 assets/icon.png --out assets/icon.iconset/icon_32x32@2x.png && sips -z 128 128 assets/icon.png --out assets/icon.iconset/icon_128x128.png && sips -z 256 256 assets/icon.png --out assets/icon.iconset/icon_128x128@2x.png && sips -z 256 256 assets/icon.png --out assets/icon.iconset/icon_256x256.png && sips -z 512 512 assets/icon.png --out assets/icon.iconset/icon_256x256@2x.png && sips -z 512 512 assets/icon.png --out assets/icon.iconset/icon_512x512.png && sips -z 1024 1024 assets/icon.png --out assets/icon.iconset/icon_512x512@2x.png && iconutil -c icns assets/icon.iconset -o assets/icon.icns && rm -rf assets/icon.iconset",
+    "release": "standard-version",
+    "ts-check-windows": "tsc -p windows/tsconfig.json --noEmit",
+    "ts-check-backend": "tsc -p main/tsconfig.json --noEmit",
+    "lint": "eslint --ext .ts,.tsx ."
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "arrowParens": "always",
+    "printWidth": 80,
+    "semi": false
+  },
+  "packageManager": "pnpm@8.15.4",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.12",
+    "@tailwindcss/vite": "^4.0.12",
+    "@types/electron-squirrel-startup": "^1.0.2",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "conventional-changelog-cli": "^5.0.0",
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1",
+    "electron-notarize": "^1.2.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.31.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "standard-version": "9.5.0",
+    "tailwindcss": "^4.0.12",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.8"
+  },
+  "dependencies": {
+    "@sentry/electron": "^7.2.0",
+    "@tailwindcss/forms": "^0.5.10",
+    "chalk": "^4.0.0",
+    "class-variance-authority": "^0.7.1",
+    "dotenv": "^17.2.3",
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^8.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "source-map-support": "^0.5.21",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.1.12"
+  },
+  "build": {
+    "appId": "com.felipap.monitor",
+    "productName": "Monitor",
+    "icon": "assets/icon",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "node_modules/**/*",
+      "entitlements.mac.plist",
+      "scripts/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icon.icns",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "entitlements.mac.plist",
+      "entitlementsInherit": "entitlements.mac.plist",
+      "notarize": false,
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "dmg": {
+      "title": "Monitor",
+      "artifactName": "Monitor-${version}-${arch}.${ext}",
+      "sign": false
+    },
+    "afterSign": "scripts/notarize.js",
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": "nsis"
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "target": "AppImage"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "author": "Felipe Aragão <faragaop@gmail.com>",
+  "license": "MIT"
+}
