@@ -1,7 +1,7 @@
 import { app, Menu, nativeImage, Tray } from 'electron'
 import path from 'path'
-import { store } from './store'
 import { captureNow, toggleMonitoring } from './lib/monitoring-state'
+import { store } from './store'
 import { showSettingsWindow } from './windows'
 
 let tray: Tray | null = null
@@ -108,12 +108,12 @@ export function getImagePath(name: string): string {
     : path.join(__dirname, '../../assets')
   const imagePath = path.join(base, name)
 
-  console.log(`Looking for image: ${name}`)
-  console.log(`  Base path: ${base}`)
-  console.log(`  Full path: ${imagePath}`)
-  console.log(`  __dirname: ${__dirname}`)
-  console.log(`  process.resourcesPath: ${process.resourcesPath}`)
-  console.log(`  app.isPackaged: ${app.isPackaged}`)
+  // console.log(`Looking for image: ${name}`)
+  // console.log(`  Base path: ${base}`)
+  // console.log(`  Full path: ${imagePath}`)
+  // console.log(`  __dirname: ${__dirname}`)
+  // console.log(`  process.resourcesPath: ${process.resourcesPath}`)
+  // console.log(`  app.isPackaged: ${app.isPackaged}`)
 
   return imagePath
 }

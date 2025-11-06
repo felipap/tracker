@@ -75,10 +75,18 @@
     },
     "files": [
       "dist/**/*",
-      "assets/**/*",
       "node_modules/**/*",
       "entitlements.mac.plist",
       "scripts/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "assets",
+        "to": "assets",
+        "filter": [
+          "**/*"
+        ]
+      }
     ],
     "mac": {
       "category": "public.app-category.productivity",

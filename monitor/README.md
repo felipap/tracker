@@ -1,6 +1,7 @@
 # Monitor
 
-A lightweight macOS menu bar application that periodically captures screenshots and uploads them to a monitoring API.
+A lightweight macOS menu bar application that periodically captures screenshots
+and uploads them to the server.
 
 ## Features
 
