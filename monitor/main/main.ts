@@ -38,6 +38,11 @@ async function onInit() {
   // Create settings window (hidden by default)
   createSettingsWindow()
 
+  // Hide dock icon by default on macOS (will show when settings window is opened)
+  if (process.platform === 'darwin') {
+    app.dock.hide()
+  }
+
   // Initialize monitor and start if enabled
   initMonitor()
   startMonitoringIfEnabled()

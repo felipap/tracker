@@ -65,11 +65,15 @@ function updateTrayMenu(): void {
     { type: 'separator' },
     {
       label: 'Settings',
+      accelerator: 'CmdOrCtrl+,',
       click: showSettingsWindow,
     },
     {
       label: 'Quit',
+      sublabel: '⌘Q',
+      accelerator: 'CmdOrCtrl+Q',
       click: () => {
+        // app.isQuitting = true // Do we need this?
         app.quit()
       },
     },

@@ -48,9 +48,19 @@ export function createSettingsWindow(): BrowserWindow {
     settingsWindow.loadFile(settingsPath)
   }
 
+  // Hide dock icon when window is hidden
+  settingsWindow.on('hide', () => {
+    if (process.platform === 'darwin') {
+      app.dock.hide()
+    }
+  })
+
   // Clean up reference when window is closed
   settingsWindow.on('closed', () => {
     settingsWindow = null
+    if (process.platform === 'darwin') {
+      app.dock.hide()
+    }
   })
 
   return settingsWindow
@@ -64,6 +74,12 @@ export function showSettingsWindow(): void {
   if (!settingsWindow) {
     createSettingsWindow()
   }
+
+  // Show dock icon on macOS when settings window is shown
+  if (process.platform === 'darwin') {
+    app.dock.show()
+  }
+
   settingsWindow?.show()
   settingsWindow?.focus()
 }

@@ -95,6 +95,38 @@ export const Screenshots = pgTable('screenshots', {
 
 export type Screenshot = InferSelectModel<typeof Screenshots>
 
+export const iMessages = pgTable(
+  'imessages',
+  {
+    id: text('id')
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    userId: integer('user_id')
+      .notNull()
+      .default(DEFAULT_USER_ID),
+    messageId: integer('message_id').notNull(),
+    guid: text('guid').notNull(),
+    text: text('text'),
+    contact: text('contact').notNull(),
+    subject: text('subject'),
+    date: timestamp('date'),
+    isFromMe: integer('is_from_me').notNull(),
+    isRead: integer('is_read').notNull(),
+    isSent: integer('is_sent').notNull(),
+    isDelivered: integer('is_delivered').notNull(),
+    hasAttachments: integer('has_attachments').notNull(),
+    service: text('service').notNull(),
+    chatId: text('chat_id'),
+    chatName: text('chat_name'),
+    deviceId: text('device_id').notNull(),
+    syncTime: timestamp('sync_time').notNull(),
+  },
+  table => [unique('imessages_guid_unique').on(table.guid)],
+)
+
+export type iMessage = InferSelectModel<typeof iMessages>
+
 // export const Dislocations = pgTable('dislocations', {
 // 	id: serial('id').primaryKey(),
 // 	createdAt: timestamp('created_at').defaultNow().notNull(),
