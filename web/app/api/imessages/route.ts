@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { DEFAULT_USER_ID, iMessages } from '@/db/schema'
 import { authMobileRequest } from '../lib'
 import { z } from 'zod'
+import { and, eq, gte } from 'drizzle-orm'
 
 const FormattediMessageSchema = z.object({
   id: z.number(),
@@ -26,6 +27,40 @@ const PostSchema = z.object({
   syncTime: z.string(),
   deviceId: z.string(),
   messageCount: z.number(),
+})
+
+export const GET = authMobileRequest(async (request: NextRequest) => {
+  console.log('GET /api/imessages')
+
+  const { searchParams } = new URL(request.url)
+  const afterParam = searchParams.get('after')
+
+  const conditions = [eq(iMessages.userId, DEFAULT_USER_ID)]
+
+  if (afterParam) {
+    const afterDate = new Date(afterParam)
+    if (isNaN(afterDate.getTime())) {
+      return Response.json(
+        { error: 'Invalid date format for "after" parameter' },
+        { status: 400 },
+      )
+    }
+    conditions.push(gte(iMessages.date, afterDate))
+  }
+
+  const messages = await db.query.iMessages.findMany({
+    where: and(...conditions),
+    orderBy: (iMessages, { desc }) => [desc(iMessages.date)],
+    limit: 1000,
+  })
+
+  console.info(`Retrieved ${messages.length} iMessages`)
+
+  return Response.json({
+    success: true,
+    messages,
+    count: messages.length,
+  })
 })
 
 export const POST = authMobileRequest(async (request: NextRequest) => {
@@ -86,10 +121,11 @@ export const POST = authMobileRequest(async (request: NextRequest) => {
     }
   }
 
-  console.info(
-    `Inserted ${insertedMessages.length} iMessages (${messages.length - insertedMessages.length} duplicates skipped)`,
-    insertedMessages.map((m) => m.id),
-  )
+  const skippedCount = messages.length - insertedMessages.length
+
+  console.info(`Inserted ${insertedMessages.length} iMessages`)
+  console.info(`Skipped ${skippedCount} duplicate messages`)
+  console.info('Inserted message IDs:', insertedMessages.map((m) => m.id))
 
   return Response.json({
     success: true,
